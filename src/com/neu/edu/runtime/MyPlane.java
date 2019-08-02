@@ -12,20 +12,25 @@ import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Rectangle;
 import java.awt.event.KeyEvent;
+import java.util.List;
+import java.util.Random;
 
 public class MyPlane extends BaseSprite implements Moveable, Drawable {
     private Image image;
 
-    private int speed = FrameConstant.GAME_SPEED * 3;
+    public void setImage(Image image) {
+        this.image = image;
+    }
+
+    private int speed = FrameConstant.GAME_SPEED * 4;
 
     private boolean up, right, down, left;
     private boolean fire;
 
     public MyPlane() {
-        this((FrameConstant.FRAME_WIDTH - ImageMap.get("plane01").getWidth(null)) / 2,
-                FrameConstant.FRAME_HEIGHT - ImageMap.get("plane01").getHeight(null),
-                ImageMap.get("plane01"));
-
+        this((FrameConstant.FRAME_WIDTH - ImageMap.get("plane02").getWidth(null)) / 2,
+                FrameConstant.FRAME_HEIGHT - ImageMap.get("plane02").getHeight(null),
+                ImageMap.get("plane02"));
     }
 
     public MyPlane(int x, int y, Image image) {
@@ -36,9 +41,9 @@ public class MyPlane extends BaseSprite implements Moveable, Drawable {
 
     @Override
     public void draw(Graphics g) {
-
-        g.drawImage(image, getX(), getY(), image.getWidth(null), image.getHeight(null), null);
         move();
+        g.drawImage(image, getX(), getY(), image.getWidth(null), image.getHeight(null), null);
+
 //        fire();
 //        if (fire){
 //            index++;
@@ -52,14 +57,19 @@ public class MyPlane extends BaseSprite implements Moveable, Drawable {
      * 开火方法
      */
 //    private int index = 0;
+    private int type = 3;
+
+    public void setType(int type) {
+        this.type = type;
+    }
 
     public void fire() {
         if (fire) {
             GameFrame gameFrame = DataStore.get("gameFrame");
             gameFrame.myBulletList.add(new MyBullet(
-                    getX() + (image.getWidth(null) / 2) - (ImageMap.get("myb01").getWidth(null) / 2),
-                    getY() -ImageMap.get("myb01").getWidth(null),
-                    ImageMap.get("myb01")
+                    getX() + (image.getWidth(null) / 2) - (ImageMap.get("myb0" + type).getWidth(null) / 2),
+                    getY() - ImageMap.get("myb0" + type).getWidth(null),
+                    ImageMap.get("myb0" + type)
 
             ));
         }
@@ -113,7 +123,7 @@ public class MyPlane extends BaseSprite implements Moveable, Drawable {
             left = true;
         }
         if (e.getKeyCode() == KeyEvent.VK_J) {
-             fire = true;
+            fire = true;
         }
     }
 
@@ -140,4 +150,6 @@ public class MyPlane extends BaseSprite implements Moveable, Drawable {
     public Rectangle getRectangle() {
         return new Rectangle(getX(), getY(), image.getWidth(null), image.getHeight(null));
     }
+
+
 }

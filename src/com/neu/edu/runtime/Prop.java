@@ -11,19 +11,19 @@ import com.neu.edu.util.ImageMap;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Rectangle;
-import java.util.List;
 import java.util.Random;
 
-public class EnempBullet extends BaseSprite implements Moveable, Drawable {
+public class Prop extends BaseSprite implements Moveable, Drawable {
 
     private Image image;
     private int speed = FrameConstant.GAME_SPEED * 5;
+    private Random random = new Random();
 
-    public EnempBullet() {
-        this(0,0, ImageMap.get("epb01"));
+    public Prop() {
+        this(0, 0, ImageMap.get("prop01"));
     }
 
-    public EnempBullet(int x, int y, Image image) {
+    public Prop(int x, int y, Image image) {
         super(x, y);
         this.image = image;
     }
@@ -31,32 +31,35 @@ public class EnempBullet extends BaseSprite implements Moveable, Drawable {
     @Override
     public void draw(Graphics g) {
         move();
-        borderTesting();
+//        add();
         g.drawImage(image, getX(), getY(), image.getWidth(null), image.getHeight(null), null);
 
     }
 
-    private Random random = new Random();
-    private int type = random.nextInt(3);
+
+    private boolean right = true;
+
     @Override
     public void move() {
-        if (type == 0){
-            setY(getY() + speed);
-        }
-        if (type == 1) {
-            setY(getY() + speed);
+        if (right) {
             setX(getX() + speed);
-        }
-        if (type == 2){
             setY(getY() + speed);
+        } else {
             setX(getX() - speed);
         }
+        borderTesting();
+
     }
 
-    public void borderTesting(){
-        if (getY() > FrameConstant.FRAME_HEIGHT){
+    public void borderTesting() {
+        if (getY() > FrameConstant.FRAME_HEIGHT) {
             GameFrame gameFrame = DataStore.get("gameFrame");
-            gameFrame.enempBulletList.remove(this);
+            gameFrame.propList.remove(this);
+        }
+        if (getX() + image.getWidth(null) >= FrameConstant.FRAME_WIDTH) {
+            right = false;
+        } else if (getX() < 0) {
+            right = true;
         }
     }
 
@@ -65,14 +68,15 @@ public class EnempBullet extends BaseSprite implements Moveable, Drawable {
         return new Rectangle(getX(), getY(), image.getWidth(null), image.getHeight(null));
     }
 
-    //敌方子弹与我方飞机的碰撞
-    public void collisionTesting(MyPlane myPlane){
+    //道具与我方飞机碰撞
+    public void collisionTesting(MyPlane myPlane) {
         GameFrame gameFrame = DataStore.get("gameFrame");
-        if (myPlane.getRectangle().intersects(this.getRectangle())){
-            gameFrame.enempBulletList.remove(this);
-            if (gameFrame.bloodList.size() > 0) {
-                gameFrame.bloodList.remove(0);
-            }
+        if (myPlane.getRectangle().intersects(this.getRectangle())) {
+            gameFrame.propList.remove(this);
+            myPlane.setType(1);
+            myPlane.setImage(ImageMap.get("plane03"));
         }
+
     }
+
 }

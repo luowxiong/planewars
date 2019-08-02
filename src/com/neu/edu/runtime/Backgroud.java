@@ -13,8 +13,13 @@ public class Backgroud extends BaseSprite implements Moveable, Drawable {
 
     private Image image;
 
+    public void setImage(Image image) {
+        this.image = image;
+    }
+
     public Backgroud() {
-        this(0, FrameConstant.FRAME_HEIGHT - ImageMap.get("bg01").getHeight(null), ImageMap.get("bg01"));
+        this(0, FrameConstant.FRAME_HEIGHT - ImageMap.get("bg03").getHeight(null),
+                ImageMap.get("bg03"));
     }
 
     public Backgroud(int x, int y, Image image) {

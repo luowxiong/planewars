@@ -101,9 +101,9 @@ public class GameFrame extends Frame {
             for (MyBullet myBullet : myBulletList) {
                 myBullet.collisionTesting(enempPlaneList);
             }
-//            for (EnempBullet enempBullet : enempBulletList) {
-//                enempBullet.collisionTesting(myPlane);
-//            }
+            for (EnempBullet enempBullet : enempBulletList) {
+                enempBullet.collisionTesting(myPlane);
+            }
             for (MyBullet myBullet : myBulletList) {
                 myBullet.collisionBullet(enempBulletList);
                 if (score >= 20 && bossBloodList.size() > 0) {
